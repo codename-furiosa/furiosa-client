@@ -233,3 +233,7 @@ p#message-from-us {
     background-color: black;
     color: white;
 }
+.ui.disabled.input,
+.ui.input:not(.disabled) input[disabled] {
+    opacity: 0.95;
+}

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Layout from '../../components/Layout';
-import { Container } from 'semantic-ui-react';
+import { Container, Image, Button } from 'semantic-ui-react';
 import { Link } from "../../routes";
 //import App from "../../components/App";
 //import Header from "../../components/Header";
@@ -32,7 +32,7 @@ export default class Login extends Component {
             return {};
         }
 
-    const success = getCookie("success", ctx.req);
+        const success = getCookie("success", ctx.req);
         if (success) {
             removeCookie("success");
         }
@@ -91,43 +91,37 @@ export default class Login extends Component {
         return (
             <Layout authenticated={authenticated}>
                 <div>
-                    <Container>
-                        {metamask && (
-                            <>
+                    <div className='intro-section'>
+                        <Container>
+                            <h3>1-step login with Metamask</h3>
+                            <p>By signing a generated piece of data with your Metamask account, we are able to cryptographically identify your account without having to mess with usernames and passwords.</p>
+                            <p>Your account and identity is then linked to your Metamask wallet's public address.</p>
+                            <p>Easy Peasy.</p>
+                            {metamask && (
                                 <form onSubmit={this.handleSubmit}>
-                                    <h1>Login</h1>
-                                    <button type="submit">Submit</button>
+                                    <Button className="ui button" type="submit">Login With Metamask</Button>
                                 </form>
-
-                                {challenge && (
-                                    <div className="data">
-                                        <h2>Challenge</h2>
-                                        <pre>{JSON.stringify(challenge, null, 4)}</pre>
-                                    </div>
-                                )}
-
-                                {signature && (
-                                    <div className="data">
-                                        <h2>Signature</h2>
-                                        <pre>{signature}</pre>
-                                    </div>
-                                )}
-
-                                {authenticated &&
-                                    <h3>AUTHENTICATED!</h3>}
-                                {!authenticated &&
-                                    <h3>PLEASE LOGIN!!</h3>}
-                            </>
-                        )}
-
-                        {!metamask && (
-                            <>
-                                <Link href='https://metamask.io/'>
-                                    <a className="item">Please install metamask</a>
-                                </Link>
-                            </>
-                        )}
-                    </Container>
+                            )}
+                            {!metamask && (
+                                <>
+                                    <p>
+                                        <Link href='https://metamask.io/'>
+                                            <a target="_blank">First install Metamask</a>
+                                        </Link>
+                                    </p>
+                                    <span>(then refresh this page)</span>
+                                </>
+                            )}
+                        </Container>
+                    </div>
+                    <div className='intro-section divider-section'>
+                        <h3>The Nitty Gritty</h3>
+                    </div>
+                    <div className='intro-section'>
+                        <Image src='/static/metamask-login-flow.png' />
+                        <span>Image courtesy of the <Link href='https://www.toptal.com/ethereum/one-click-login-flows-a-metamask-tutorial'><a>article</a></Link> by <Link href='https://www.toptal.com/resume/amaury-martiny'><a>Amaury Martiny</a></Link>. </span>
+                        <span>Implemented with the help of <Link href='https://github.com/I-Gave/meta-auth'><a>MetaAuth</a></Link>.</span>
+                    </div>
                 </div>
             </Layout>
         );
