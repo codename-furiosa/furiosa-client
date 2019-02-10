@@ -5,10 +5,12 @@ import { Link } from '../../routes';
 import "../../style.css";
 import * as superagent from 'superagent';
 import moment from 'moment';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class FreelancerIndex extends Component {
     static async getInitialProps() {
-        const freelancerDetails = await superagent.get('http://localhost:8080/api/freelancers').then(res => res.body);
+        const freelancerDetails = await superagent.get(publicRuntimeConfig.API_URI + '/api/freelancers').then(res => res.body);
 
         return { freelancerDetails };
     }

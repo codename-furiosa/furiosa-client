@@ -8,13 +8,15 @@ import moment from 'moment';
 import { isAuthenticated, getJwt } from "../lib/auth";
 import PropTypes from "prop-types";
 import * as superagent from 'superagent';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class CampaignIndex extends Component {
     state = {
         user: ''
     }
     static async getInitialProps(props) {
-        const campaignDetails = await superagent.get('http://localhost:8080/api/campaigns').then(res => res.body);
+        const campaignDetails = await superagent.get(publicRuntimeConfig.API_URI + '/api/campaigns').then(res => res.body);
 
         return {
             campaignDetails,
@@ -26,7 +28,7 @@ class CampaignIndex extends Component {
         if(isAuthenticated(this.props)) {
             const accounts = await web3.eth.getAccounts();
             const userDetails = await superagent
-                .get('http://localhost:8080/user/' + accounts[0])
+                .get(publicRuntimeConfig.API_URI + '/user/' + accounts[0])
                 .set('Authorization', 'Bearer ' + getJwt(this.props))
                 .then(res => res.body);
             this.setState({user: userDetails.name});

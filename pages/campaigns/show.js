@@ -11,7 +11,9 @@ import "../../style.css";
 import ContractRow from '../../components/ContractRow';
 import ContributionRow from '../../components/ContributionRow';
 import moment from 'moment';
-import Board from 'react-trello'
+import Board from 'react-trello';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class CampaignShow extends Component {
     state = {
@@ -34,10 +36,10 @@ class CampaignShow extends Component {
             })
         );
 
-        const campaign_details = await superagent.get('http://localhost:8080/api/campaigns/' + props.query.address).then(res => res.body);
-        const contributions = await superagent.get('http://localhost:8080/api/contributions').query({ 'campaign': props.query.address }).then(res => res.body);
-        const contracts_details = await superagent.get('http://localhost:8080/api/contracts').query({ 'campaign': props.query.address }).then(res => res.body);
-        const github_details = await superagent.get('http://localhost:8080/api/installations/' + campaign_details.installation_id).then(res => res.body);
+        const campaign_details = await superagent.get(publicRuntimeConfig.API_URI + '/api/campaigns/' + props.query.address).then(res => res.body);
+        const contributions = await superagent.get(publicRuntimeConfig.API_URI + '/api/contributions').query({ 'campaign': props.query.address }).then(res => res.body);
+        const contracts_details = await superagent.get(publicRuntimeConfig.API_URI + '/api/contracts').query({ 'campaign': props.query.address }).then(res => res.body);
+        const github_details = await superagent.get(publicRuntimeConfig.API_URI + '/api/installations/' + campaign_details.installation_id).then(res => res.body);
 
         return {
             github_details: github_details,
@@ -248,7 +250,7 @@ class CampaignShow extends Component {
     }
 
     logContribution(contribution) {
-        fetch('/api/contributions', {
+        fetch(publicRuntimeConfig.API_URI + '/api/contributions', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

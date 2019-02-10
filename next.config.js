@@ -1,5 +1,5 @@
-// next.config.js
 const withCSS = require('@zeit/next-css');
+
 module.exports = withCSS({
     /*
     The below config is a workaround for the issue reported here:
@@ -14,5 +14,9 @@ module.exports = withCSS({
         maxInactiveAge: 25 * 1000,
         // number of pages that should be kept simultaneously without being disposed
         pagesBufferLength: 5
+    },
+    publicRuntimeConfig: {
+        API_URI: process.env.API_URI,
+        BOT_URI: process.env.BOT_URI
     }
 });

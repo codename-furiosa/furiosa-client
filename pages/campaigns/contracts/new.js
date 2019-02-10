@@ -7,6 +7,8 @@ import Layout from '../../../components/Layout';
 import factory from "../../../ethereum/factory";
 import * as superagent from 'superagent';
 import "../../../style.css";
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class RequestNew extends Component {
     state = {
@@ -20,7 +22,7 @@ class RequestNew extends Component {
     static async getInitialProps(props) {
         const { address } = props.query;
         const freelancers = await factory.methods.getFreelancers().call();
-        const freelancerDetails = await superagent.get('http://localhost:8080/api/freelancers').then(res => res.body);
+        const freelancerDetails = await superagent.get(publicRuntimeConfig.API_URI + '/api/freelancers').then(res => res.body);
 
         return { address, freelancers, freelancerDetails };
     }
@@ -61,7 +63,7 @@ class RequestNew extends Component {
 
     sync_github = async () => {
         try {
-            await superagent.post('http://localhost:3000/furiosa/milestone')
+            await superagent.post(publicRuntimeConfig.BOT_URI + '/furiosa/milestone')
                 .send({ 'repo': 'furiosa' })
                 .then(res => {
                     console.log(res);

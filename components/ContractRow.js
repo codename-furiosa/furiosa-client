@@ -4,6 +4,8 @@ import Campaign from '../ethereum/campaign';
 import web3 from '../ethereum/web3';
 import {Router} from "../routes";
 import * as superagent from 'superagent';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class ContractRow extends Component {
     state = {
@@ -19,7 +21,7 @@ class ContractRow extends Component {
         try {
             const accounts = await web3.eth.getAccounts();
             campaign.once('SendContract', async (error, event) => {
-                await superagent.post('http://localhost:8080/api/contracts/' + this.props.contract_details._id)
+                await superagent.post(publicRuntimeConfig.API_URI + '/api/contracts/' + this.props.contract_details._id)
                 .send({ 'status': 'approved' })
                 .then(res => {
                     console.log(res.body);

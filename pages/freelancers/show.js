@@ -8,14 +8,16 @@ import "../../style.css";
 import AcceptRow from '../../components/AcceptRow';
 import * as superagent from 'superagent';
 import Campaign from '../../ethereum/campaign';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 class FreelancerShow extends Component {
     static async getInitialProps(props) {
         const freelancer = Freelancer(props.query.address);
 
         const summary = await freelancer.methods.getSummary().call();
-        const freelancer_details = await superagent.get('http://localhost:8080/api/freelancers/' + props.query.address).then(res => res.body);
-        const contracts_details = await superagent.get('http://localhost:8080/api/contracts').query({ 'freelancer': props.query.address }).then(res => res.body);
+        const freelancer_details = await superagent.get(publicRuntimeConfig.API_URI + '/api/freelancers/' + props.query.address).then(res => res.body);
+        const contracts_details = await superagent.get(publicRuntimeConfig.API_URI + '/api/contracts').query({ 'freelancer': props.query.address }).then(res => res.body);
 
         return {
             contracts_details: contracts_details,

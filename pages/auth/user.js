@@ -7,6 +7,8 @@ import "../../style.css";
 import web3 from '../../ethereum/web3';
 import PropTypes from "prop-types";
 import * as superagent from 'superagent';
+import getConfig from 'next/config';
+const {publicRuntimeConfig} = getConfig();
 
 export default class Register extends Component {
     state = {
@@ -24,7 +26,7 @@ export default class Register extends Component {
         if(isAuthenticated(this.props)) {
             const accounts = await web3.eth.getAccounts();
             const userDetails = await superagent
-                .get('http://localhost:8080/user/' + accounts[0])
+                .get(publicRuntimeConfig.API_URI + '/user/' + accounts[0])
                 .set('Authorization', 'Bearer ' + getJwt(this.props))
                 .then(res => res.body);
             this.setState({user: userDetails.name, public_address: userDetails.address });
@@ -66,7 +68,7 @@ export default class Register extends Component {
         e.preventDefault();
 
         try {
-            await superagent.put('http://localhost:8080/user/' + this.state.public_address)
+            await superagent.put(publicRuntimeConfig.API_URI + '/user/' + this.state.public_address)
                 .set('Authorization', 'Bearer ' + getJwt(this.props))
                 .send({
                     'name': this.state.user,
