@@ -10,8 +10,7 @@
         "dev": "node server.js",
         "build": "next build",
         "start": "next start -p $PORT",
-        "heroku-postbuild": "node ethereum/compile.js && npm run build",
-        "test": "mocha"
+        "heroku-postbuild": "node ethereum/compile.js && npm run build"
     },
     "author": "Colin Lim",
     "license": "ISC",
